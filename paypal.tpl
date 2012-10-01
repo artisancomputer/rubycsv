@@ -26,5 +26,5 @@ $categories = [["Unknown", "DEFAULT"],
     [ "Accounts:Paypal", 
         "From U.S.", "To Euro"],
     [ "Business:Assets:Supplies", 
-      "dealextreme.com"]
+      "dealextreme.com"]]
 
