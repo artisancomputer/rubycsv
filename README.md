@@ -10,4 +10,10 @@ This was originally created to use with [ledger](http://ledger-cli.org) files, b
 
 ## Usage
 
-rubycsv.rb templatefile source_csv > outputfile
+`rubycsv.rb templatefile source_csv > outputfile`
+
+## Example
+
+There's a sample CSV and template file in examples folder - run it with:
+
+`./rubycsv.rb examples/savings.tpl examples/savings.csv`
