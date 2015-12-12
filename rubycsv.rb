@@ -9,7 +9,6 @@ $template_file = ARGV[0]
 $csv_filename = ARGV[1]
 $template_text = ""
 $header_row = []
-$line = 0
 
 # evaluate the template in order to get the templates and other variables out
 eval(File.read($template_file))
@@ -34,15 +33,21 @@ class CSVRow
 end
 
 # helper functions
-def clean_date(text_date) # reformat date in to big endian format
-    return Date.parse(text_date).strftime("%Y-%m-%d")
+def clean_date(text_date, date_format="%Y-%m-%d") # reformat date in to big endian format
+    return Date.strptime(text_date,date_format).strftime("%Y-%m-%d")
 end
 
-def clean_money(text_money) # nuke all but digits, negation, decimal place
+
+
+def clean_money(text_money, positive = FALSE) # nuke all but digits, negation, decimal place
     if text_money.nil?
         return ""
     end
-    return text_money.gsub(/[^-\d\.]/,'')
+    if positive
+        return text_money.gsub(/[^\d\.]/,'')
+    else
+        return text_money.gsub(/[^-\d\.]/,'')
+    end
 end
 
 def clean_num(text_num) # nuke all but digits, negation
@@ -83,11 +88,11 @@ end
 
 # parse CSV file
 
-CSV.open($csv_filename,'r') do |row|
-    $line += 1 
+csv = CSV.open($csv_filename,'r')
 
-    if($line == 1) #this is the header row, store to assign as keys on later rows, stripping whitespace
-        $header_row = row.collect{|val| val.strip}
+csv.each() do |row|
+    if(csv.lineno == 1) #this is the header row, store to assign as keys on later rows, stripping whitespace
+        $header_row = row.collect{|val| val.to_s.strip}
     else
         thisrow = CSVRow.new(row)
         #print "line: #{thisrow.csvrow.inspect}\n"
